@@ -1,2 +1,20 @@
 ---
-# tasks file for evm
+- name: Install required packages
+  apt: name={{ item }}
+  with_items:
+    - git
+    - curl
+
+- name: Install build dependences
+  command: apt-get build-dep --assume-yes emacs24
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Create /usr/local/evm directory
+  file: state=directory path=/usr/local/evm owner={{ ansible_ssh_user }}
+
+- name: Automatic installation
+  command: su - {{ ansible_ssh_user }} -c 'test -d ~/.evm || curl -fsSkL https://raw.github.com/rejeep/evm/master/go | bash'
+
+- name: Add EVM's bin directory to PATH
+  shell: su - {{ ansible_ssh_user }} -c "bash -lc 'which evm || (echo && echo \# for EVM && echo export PATH=~/.evm/bin:\\\$PATH) >> ~/.profile'"
