@@ -14,19 +14,19 @@
     DEBIAN_FRONTEND: noninteractive
 
 - name: Create /usr/local/evm directory
-  file: state=directory path=/usr/local/evm owner={{ user }}
+  file: state=directory path=/usr/local/evm owner={{ evm_user }}
 
 - name: Clone from GitHub
-  git: repo=https://github.com/rejeep/evm.git dest=~{{ user }}/.evm
+  git: repo=https://github.com/rejeep/evm.git dest=~{{ evm_user }}/.evm
 
 - name: Set owner and group to evm's files
-  file: path=~{{ user }}/.evm owner={{ user }} group={{ group }} recurse=yes
+  file: path=~{{ evm_user }}/.evm owner={{ evm_user }} group={{ evm_group }} recurse=yes
 
 - name: Check if evm is enabled
-  command: su - {{ user }} -c "bash -lc 'which evm'"
+  command: su - {{ evm_user }} -c "bash -lc 'which evm'"
   register: result
   ignore_errors: yes
 
 - name: Add path to evm's bin directory to PATH
-  shell: (echo && echo \# for EVM && echo export PATH=~/.evm/bin:\$PATH) >> ~{{ user }}/.profile
+  shell: (echo && echo \# for EVM && echo export PATH=~/.evm/bin:\$PATH) >> ~{{ evm_user }}/.profile
   when: result | failed
