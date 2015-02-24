@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Takumi KINJO
-  description: Install evm https://github.com/rejeep/evm
+  description: An ansible role to install EVM https://github.com/rejeep/evm
   license: MIT
   min_ansible_version: 1.8.2
   platforms:
